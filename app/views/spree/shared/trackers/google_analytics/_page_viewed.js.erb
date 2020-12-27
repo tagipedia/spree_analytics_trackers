@@ -1,13 +1,15 @@
 <% if tracker = Spree::Tracker.current(:google_analytics, current_store) %>
   <script>
-    if (typeof gtag !== 'undefined') {
-      <% if user_id = try_spree_current_user.try(:id) %>
-        gtag('config', '<%= tracker.analytics_id %>', {
-          'user_id': '<%= user_id %>'
-        });
-      <% else %>
-        gtag('config', '<%= tracker.analytics_id %>');
-      <% end %>
-    }
+    window.addEventListener('turbolinks:load', function() {
+      if (typeof gtag !== 'undefined') {
+        <% if user_id = try_spree_current_user.try(:id) %>
+          gtag('config', '<%= tracker.analytics_id %>', {
+            'user_id': '<%= user_id %>'
+          });
+        <% else %>
+          gtag('config', '<%= tracker.analytics_id %>');
+        <% end %>
+      }
+    });
   </script>
 <% end %>
