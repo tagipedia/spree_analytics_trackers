@@ -1,13 +1,16 @@
 <% if tracker = Spree::Tracker.current(:google_analytics, current_store) %>
   <script>
-    window.addEventListener('turbolinks:load', function() {
+    window.addEventListener('turbolinks:load', function(event) {
       if (typeof gtag !== 'undefined') {
         <% if user_id = try_spree_current_user.try(:id) %>
           gtag('config', '<%= tracker.analytics_id %>', {
-            'user_id': '<%= user_id %>'
+            'user_id': '<%= user_id %>',
+            "page_path": event.data.url.replace(window.location.protocol + "//" + window.location.hostname + (location.port && ":" + location.port), "")
           });
         <% else %>
-          gtag('config', '<%= tracker.analytics_id %>');
+          gtag('config', '<%= tracker.analytics_id %>', {
+            "page_path": event.data.url.replace(window.location.protocol + "//" + window.location.hostname + (location.port && ":" + location.port), "")
+          });
         <% end %>
       }
     });
